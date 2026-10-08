@@ -45,6 +45,9 @@ jobs:
       - name: EDA and tracked training
         run: |
           cd "$PROJECT_DIR"
+          if test -f mlflow.db; then
+            mv mlflow.db "$RUNNER_TEMP/checked-out-mlflow.db"
+          fi
           python -m src.eda
           python -m src.train
       - name: Build container
