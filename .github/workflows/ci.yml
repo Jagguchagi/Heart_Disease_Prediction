@@ -58,7 +58,7 @@ jobs:
         run: |
           cd "$PROJECT_DIR"
           docker run -d --name heart-api-ci -p 127.0.0.1:8000:8000 heart-disease-api:ci
-          curl --fail --retry 20 --retry-connrefused --retry-delay 2 http://127.0.0.1:8000/health -o /tmp/health.json
+          curl --fail --show-error --retry 20 --retry-all-errors --retry-delay 2 --connect-timeout 2 --max-time 5 http://127.0.0.1:8000/health -o /tmp/health.json
           curl --fail -H 'Content-Type: application/json' --data @sample_request.json http://127.0.0.1:8000/predict -o /tmp/prediction.json
           curl --fail http://127.0.0.1:8000/metrics -o /tmp/metrics.txt
           python - <<'PY'
