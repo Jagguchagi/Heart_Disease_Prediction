@@ -1,0 +1,8 @@
+numpy==2.2.6
+pandas==2.3.3
+scikit-learn==1.7.2
+joblib==1.5.3
+fastapi==0.142.2
+uvicorn==0.54.0
+pydantic==2.13.5
+prometheus-fastapi-instrumentator==8.1.0

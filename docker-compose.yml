@@ -1,0 +1,32 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: heart-disease-api:local
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./deployment/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - api
+
+  grafana:
+    image: grafana/grafana:12.1.1
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: localadmin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - ./deployment/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./deployment/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - prometheus

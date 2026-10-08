@@ -1,0 +1,15 @@
+numpy==2.2.6
+pandas==2.3.3
+scikit-learn==1.7.2
+matplotlib==3.10.9
+seaborn==0.13.2
+mlflow==3.17.0
+joblib==1.5.3
+fastapi==0.142.2
+uvicorn==0.54.0
+pydantic==2.13.5
+pytest==9.1.1
+pytest-cov==7.1.0
+ruff==0.16.10
+httpx==0.28.1
+prometheus-fastapi-instrumentator==8.1.0
