@@ -1,0 +1,49 @@
+{
+  "source_file": "data\\heart+disease\\processed.cleveland.data",
+  "rows": 303,
+  "feature_count": 13,
+  "feature_columns": [
+    "age",
+    "sex",
+    "cp",
+    "trestbps",
+    "chol",
+    "fbs",
+    "restecg",
+    "thalach",
+    "exang",
+    "oldpeak",
+    "slope",
+    "ca",
+    "thal"
+  ],
+  "data_types": {
+    "age": "float64",
+    "sex": "float64",
+    "cp": "float64",
+    "trestbps": "float64",
+    "chol": "float64",
+    "fbs": "float64",
+    "restecg": "float64",
+    "thalach": "float64",
+    "exang": "float64",
+    "oldpeak": "float64",
+    "slope": "float64",
+    "ca": "float64",
+    "thal": "float64"
+  },
+  "missing_values": {
+    "ca": 4,
+    "thal": 2
+  },
+  "duplicate_rows": 0,
+  "target_mapping": "num=0 -> target=0; num=1,2,3,4 -> target=1",
+  "target_counts": {
+    "0": 164,
+    "1": 139
+  },
+  "target_percentages": {
+    "0": 54.13,
+    "1": 45.87
+  }
+}

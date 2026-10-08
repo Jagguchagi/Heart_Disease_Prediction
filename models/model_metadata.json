@@ -1,0 +1,37 @@
+{
+  "selected_model": "logistic_regression",
+  "selection_criterion": "highest mean 5-fold training ROC-AUC after tuning",
+  "target_mapping": "num=0 -> 0; num=1,2,3,4 -> 1",
+  "feature_columns": [
+    "age",
+    "sex",
+    "cp",
+    "trestbps",
+    "chol",
+    "fbs",
+    "restecg",
+    "thalach",
+    "exang",
+    "oldpeak",
+    "slope",
+    "ca",
+    "thal"
+  ],
+  "best_parameters": {
+    "classifier__C": 0.1
+  },
+  "metrics": {
+    "model": "logistic_regression",
+    "best_cv_roc_auc_during_tuning": 0.9113431613431614,
+    "cv_accuracy": 0.8386904761904763,
+    "cv_precision": 0.8680748386311045,
+    "cv_recall": 0.773913043478261,
+    "cv_roc_auc": 0.9024559981081721,
+    "test_accuracy": 0.8852459016393442,
+    "test_precision": 0.8387096774193549,
+    "test_recall": 0.9285714285714286,
+    "test_roc_auc": 0.9653679653679654,
+    "best_parameters": "{\"classifier__C\": 0.1}"
+  },
+  "warning": "Educational dataset/model; not for clinical diagnosis or treatment decisions."
+}
