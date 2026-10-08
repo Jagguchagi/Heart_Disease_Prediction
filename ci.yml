@@ -1,0 +1,88 @@
+name: Heart Disease CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-train-container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Locate application
+        run: |
+          if test -f requirements.txt; then
+            echo 'PROJECT_DIR=.' >> "$GITHUB_ENV"
+          elif test -f Heart_Disease/requirements.txt; then
+            echo 'PROJECT_DIR=Heart_Disease' >> "$GITHUB_ENV"
+          else
+            echo 'Missing requirements.txt: upload the complete application first.'
+            exit 1
+          fi
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: pip
+          cache-dependency-path: '**/requirements.txt'
+      - name: Install dependencies
+        run: |
+          cd "$PROJECT_DIR"
+          python -m pip install -r requirements.txt
+      - name: Lint
+        run: |
+          cd "$PROJECT_DIR"
+          python -m ruff check src tests
+      - name: Test
+        run: |
+          cd "$PROJECT_DIR"
+          python -m pytest -q --junitxml=artifacts/test-results.xml
+      - name: EDA and tracked training
+        run: |
+          cd "$PROJECT_DIR"
+          python -m src.eda
+          python -m src.train
+      - name: Build container
+        run: |
+          cd "$PROJECT_DIR"
+          docker build -t heart-disease-api:ci .
+      - name: Verify container endpoints
+        run: |
+          cd "$PROJECT_DIR"
+          docker run -d --name heart-api-ci -p 127.0.0.1:8000:8000 heart-disease-api:ci
+          curl --fail --retry 20 --retry-connrefused --retry-delay 2 http://127.0.0.1:8000/health -o /tmp/health.json
+          curl --fail -H 'Content-Type: application/json' --data @sample_request.json http://127.0.0.1:8000/predict -o /tmp/prediction.json
+          curl --fail http://127.0.0.1:8000/metrics -o /tmp/metrics.txt
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          health = json.loads(Path('/tmp/health.json').read_text())
+          prediction = json.loads(Path('/tmp/prediction.json').read_text())
+          assert health['status'] == 'ok' and health['model_ready'] is True
+          assert prediction['prediction'] in (0, 1)
+          assert 0 <= prediction['confidence'] <= 1
+          assert 0 <= prediction['disease_probability'] <= 1
+          assert 'http_requests_total' in Path('/tmp/metrics.txt').read_text()
+          print(health, prediction)
+          PY
+      - name: Container logs and cleanup
+        if: always()
+        run: |
+          docker logs heart-api-ci || true
+          docker rm -f heart-api-ci || true
+      - name: Save evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: training-and-test-evidence
+          path: |
+            ${{ env.PROJECT_DIR }}/artifacts/
+            ${{ env.PROJECT_DIR }}/models/
+            ${{ env.PROJECT_DIR }}/mlflow.db
+          if-no-files-found: warn
