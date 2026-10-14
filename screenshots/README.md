@@ -1,12 +1,14 @@
 # Submission Evidence Checklist
 
-Save screenshots here after you run each component locally. Only include screenshots from runs you personally verified.
+Verified implementation/results are summarized in the bundle's top-level `README.md`. Save genuine screenshots from the lab VM or GitHub here before submission; do not count plot exports as infrastructure screenshots.
 
-- [ ] EDA plots and class-balance summary
-- [ ] MLflow experiment showing both completed model runs and logged metrics/artifacts
-- [ ] Passing local CI or Jenkins pipeline output
-- [ ] Successful Docker image build and running container
-- [ ] API `/health` and `/predict` response from the container
-- [ ] Prometheus scrape target and Grafana dashboard
-- [ ] Kubernetes Ready pod, Service, and working forwarded API
-- [ ] End-to-end demo video file or its local path
+- [x] EDA and model-evaluation plots copied here: `class_balance.jpeg`, `correlation_heatmap.jpeg`, `feature_distributions.jpeg`, `logistic_regression_confusion_matrix.jpeg`, `logistic_regression_roc_curve.jpeg`, `random_forest_confusion_matrix.jpeg`, `random_forest_roc_curve.jpeg`. Source figures are also under `../artifacts/`.
+- [ ] MLflow UI showing both completed model runs, metrics, and artifacts.
+- [ ] Successful GitHub Actions run summary and job stages.
+- [ ] Docker build and running Compose containers.
+- [ ] Container API `/health` and `/predict` responses.
+- [ ] Prometheus API target showing UP.
+- [x] Grafana dashboard showing request and latency metrics: `grafana-dashboard.png`.
+- [x] Kubernetes Ready pod and LoadBalancer service: `kubernetes-deployment.png`.
+- [x] Successful Kubernetes LoadBalancer `/health` and `/predict` responses: `kubernetes-deployment.png`.
+- [ ] Short end-to-end demo video and final ten-page report (listed here for submission tracking; store the video/report at the course-required location).
